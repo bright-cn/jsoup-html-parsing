@@ -1,6 +1,6 @@
 # 使用 jsoup 解析 HTML
 
-[![宣传图片](https://github.com/luminati-io/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://www.bright.cn/)
+[![宣传图片](https://github.com/bright-cn/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://www.bright.cn/)
 
 本指南将向你介绍如何在 Java 中使用 `jsoup` 来解析 HTML。你将学习如何使用 DOM 方法、处理分页，以及如何优化你的网页解析流程。
 
