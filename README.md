@@ -1,30 +1,30 @@
 # 使用 jsoup 解析 HTML
 
-[![宣传图片](https://github.com/bright-cn/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://www.bright.cn/)
+[![推广](https://github.com/bright-cn/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://www.bright.cn/) 
 
-本指南将向你介绍如何在 Java 中使用 `jsoup` 来解析 HTML。你将学习如何使用 DOM 方法、处理分页，以及如何优化你的网页解析流程。
+本指南介绍如何在 Java 中使用 `jsoup` 解析 HTML。你将学习如何使用 DOM 方法、处理分页并优化解析工作流。
 
-- [使用 DOM 方法与 Jsoup](#使用-dom-方法与-jsoup)
+- [使用 Jsoup 的 DOM 方法](#使用-jsoup-的-dom-方法)
   - [getElementById](#getelementbyid)
   - [getElementsByTag](#getelementsbytag)
   - [getElementsByClass](#getelementsbyclass)
   - [getElementsByAttribute](#getelementsbyattribute)
-- [进阶技巧](#进阶技巧)
+- [高级技巧](#高级技巧)
   - [CSS 选择器](#css-选择器)
   - [处理分页](#处理分页)
-- [综合示例](#综合示例)
+- [整合所有内容](#整合所有内容)
 
 ## 开始使用
 
-本教程假设你使用 [Maven](https://maven.apache.org/) 进行依赖管理。
+本教程假定使用 [Maven](https://maven.apache.org/) 进行依赖项管理。
 
-在安装 Maven 后，先创建一个名为 `jsoup-scraper` 的新 Java 项目：
+安装 Maven 后，创建一个名为 `jsoup-scraper` 的新 Java 项目：
 
 ```bash
 mvn archetype:generate -DgroupId=com.example -DartifactId=jsoup-scraper -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 ```
 
-要添加所需的依赖，请将 `pom.xml` 中的内容替换为以下代码：
+要添加相关依赖项，请将 `pom.xml` 中的代码替换为以下代码：
 
 ```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -56,7 +56,7 @@ mvn archetype:generate -DgroupId=com.example -DartifactId=jsoup-scraper -Darchet
 </project>
 ```
 
-然后在 `App.java` 文件中粘贴以下代码：
+现在，将以下代码粘贴到 `App.java` 中：
 
 ```java
 package com.example;
@@ -77,10 +77,10 @@ public class App {
             try {
                 System.out.println("---------------------PAGE "+pageCount+"--------------------------");
 
-                //连接到网站并获取其 HTML
+                //connect to a website and get its HTML
                 Document doc = Jsoup.connect(url).get();
             
-                //打印标题
+                //print the title
                 System.out.println("Page Title: " + doc.title());
             
                 
@@ -93,32 +93,32 @@ public class App {
 }
 ```
 
-- `Jsoup.connect("https://books.toscrape.com").get()`：此行将抓取页面并返回一个可操作的 `Document` 对象。  
-- `doc.title()` 返回该 HTML 文档的标题，这里为：`All products | Books to Scrape - Sandbox`。
+- `Jsoup.connect("https://books.toscrape.com").get()`：此行会获取页面并返回一个可供你操作的 `Document` 对象。
+- `doc.title()` 返回 HTML 文档中的标题，在本例中为：`All products | Books to Scrape - Sandbox`。
 
-## 使用 DOM 方法与 Jsoup
+## 使用 Jsoup 的 DOM 方法
 
-`jsoup` 提供了多种方法来在 DOM (文档对象模型) 中寻找元素。以下方法都可用于轻松定位网页中的元素。
+`jsoup` 包含多种用于在 DOM（文档对象模型）中查找元素的方法。我们可以使用以下任一方法轻松查找页面元素。
 
-- `getElementById()`：根据元素的 `id` 查找。  
-- `getElementsByClass()`：根据元素的 CSS class 查找所有匹配元素。  
-- `getElementsByTag()`：根据元素的 HTML 标签查找所有匹配元素。  
-- `getElementsByAttribute()`：根据元素包含的某个属性来查找所有匹配元素。
+- `getElementById()`：使用元素的 `id` 查找该元素。
+- `getElementsByClass()`：使用 CSS 类查找所有元素。
+- `getElementsByTag()`：使用 HTML 标签查找所有元素。
+- `getElementsByAttribute()`：查找包含特定属性的所有元素。
 
 ### getElementById
 
-在我们要爬取的网站中，侧边栏包含一个 `div`，其 `id` 为 `promotions_left`：
+在我们要抓取的网站上，侧边栏包含一个 `div`，其 `id` 为 `promotions_left`：
 
-![查看侧边栏元素](https://github.com/bright-cn/jsoup-html-parsing/blob/main/Images/Inspect-the-sidebar.png)
+![检查侧边栏](https://github.com/bright-cn/jsoup-html-parsing/blob/main/Images/Inspect-the-sidebar.png)
 
 ```java
-//根据 ID 查找
+//get by Id
 Element sidebar = doc.getElementById("promotions_left");
 
 System.out.println("Sidebar: " + sidebar);
 ```
 
-此代码将输出你在浏览器检查工具中看到的 HTML 元素：
+此代码会输出你在检查页面中看到的 HTML 元素。
 
 ```
 Sidebar: <div id="promotions_left">
@@ -127,24 +127,24 @@ Sidebar: <div id="promotions_left">
 
 ### getElementsByTag
 
-`getElementsByTag()` 用于找到页面中所有某个标签的元素。在本页面，每本书都位于一个单独的 `article` 标签中：
+`getElementsByTag()` 可用于查找页面上带有特定标签的所有元素。在此页面中，每本书都包含在一个独有的 `article` 标签内：
 
-![查看图书元素](https://github.com/bright-cn/jsoup-html-parsing/blob/main/Images/Inspect-books.png)
+![检查图书](https://github.com/bright-cn/jsoup-html-parsing/blob/main/Images/Inspect-books.png)
 
-下面的代码将返回一个包含所有书籍信息的数组，这也是后续获取更多数据的基础：
+以下代码会返回一个图书数组，为其余数据的提取奠定基础。
 
 ```java
-//根据标签查找
+//get by tag
 Elements books = doc.getElementsByTag("article");
 ```
 
 ### getElementsByClass
 
-让我们看看书价相关的元素。价格所在的 class 为 `price_color`：
+我们来检查一本书的价格。其类为 `price_color`：
 
-![查看价格元素](https://github.com/bright-cn/jsoup-html-parsing/blob/main/Images/Inspect-price.png)
+![检查价格](https://github.com/bright-cn/jsoup-html-parsing/blob/main/Images/Inspect-price.png)
 
-下面的代码片段会查找所有 `price_color` class 的元素，并使用 `.first().text()` 打印第一个的文字内容：
+以下代码片段会查找 `price_color` 类的所有元素，并使用 `.first().text()` 输出第一个元素的文本：
 
 ```java
 System.out.println("Price: " + book.getElementsByClass("price_color").first().text());
@@ -152,19 +152,19 @@ System.out.println("Price: " + book.getElementsByClass("price_color").first().te
 
 ### getElementsByAttribute
 
-下面是用 `getElementsByAttribute("href")` 查找所有包含 `href` 属性的元素：
+我们使用 `getElementsByAttribute("href")` 查找所有带有 `href` 属性的元素：
 
 ```java
-//根据属性查找
+//get by attribute
 Elements hrefs = book.getElementsByAttribute("href");
 System.out.println("Link: https://books.toscrape.com/" + hrefs.first().attr("href"));
 ```
 
-## 进阶技巧
+## 高级技巧
 
 ### CSS 选择器
 
-如果需要使用多种条件来定位元素，可以将 CSS 选择器传给 `select()` 方法。它将返回所有符合选择器的对象数组。下面的示例中，我们使用 `li[class='next']` 来查找所有具有 `next` class 的 `li` 元素：
+要根据多个条件查找元素，可以将 CSS 选择器传递给 `select()` 方法。该方法会返回一个数组，其中包含与选择器匹配的所有对象。在下一个代码片段中，我们使用 `li[class='next']` 查找所有带有 `next` 类的 `li` 项：
 
 ```java
 Elements nextPage = doc.select("li[class='next']");
@@ -172,9 +172,9 @@ Elements nextPage = doc.select("li[class='next']");
 
 ### 处理分页
 
-在处理分页时，我们先用 `nextPage.first()` 获取数组中的第一个元素，然后调用 `getElementsByAttribute("href").attr("href")` 获取其 `href` 值。
+要处理分页，我们首先使用 `nextPage.first()` 获取数组中的第一个元素。然后对该元素调用 `getElementsByAttribute("href").attr("href")`，以提取其 `href` 值。
 
-由于在翻页到第 2 页后，链接中会去掉 `catalogue`，我们检查并手动添加它。然后将这个更新后的链接与基础 URL 组合，得到下一页的完整链接。
+由于从第 2 页开始，链接中的 `catalogue` 一词会被移除，因此，如果链接不包含 `catalogue`，我们就将 `href` 添加回去。之后，将更新后的链接与基础 URL 组合，以获得下一页的 URL。
 
 ```java
 if (!nextPage.isEmpty()) {
@@ -187,9 +187,9 @@ if (!nextPage.isEmpty()) {
 }
 ```
 
-## 综合示例
+## 整合所有内容
 
-以下是完整的 Java 代码。若想爬取多页数据，只需将 `while (pageCount <= 1)` 中的 `1` 改大一些，例如想爬取 4 页，就写成 `while (pageCount <= 4)`。
+以下是最终的 Java 代码。要抓取多个页面，只需更改 `while (pageCount <= 1)` 中的 `1`。例如，如果要爬取 4 个页面，请使用 `while (pageCount <= 4)`。
 
 ```java
 import org.jsoup.Jsoup;
@@ -208,18 +208,18 @@ public class App {
             try {
                 System.out.println("---------------------PAGE "+pageCount+"--------------------------");
 
-                //连接到网站并获取其 HTML
+                //connect to a website and get its HTML
                 Document doc = Jsoup.connect(url).get();
             
-                //打印标题
+                //print the title
                 System.out.println("Page Title: " + doc.title());
             
-                //根据 ID 查找
+                //get by Id
                 Element sidebar = doc.getElementById("promotions_left");
 
                 System.out.println("Sidebar: " + sidebar);
 
-                //根据标签查找
+                //get by tag
                 Elements books = doc.getElementsByTag("article");
 
                 for (Element book : books) {
@@ -228,12 +228,12 @@ public class App {
                     System.out.println("Price: " + book.getElementsByClass("price_color").first().text());
                     System.out.println("Availability: " + book.getElementsByClass("instock availability").first().text());
 
-                    //根据属性查找
+                    //get by attribute
                     Elements hrefs = book.getElementsByAttribute("href");
                     System.out.println("Link: https://books.toscrape.com/" + hrefs.first().attr("href"));
                 }
 
-                //使用 CSS 选择器找到下一页的按钮
+                //find the next button using its CSS selector
                 Elements nextPage = doc.select("li[class='next']");
                 if (!nextPage.isEmpty()) {
                     String nextUrl = nextPage.first().getElementsByAttribute("href").attr("href");
@@ -259,13 +259,13 @@ public class App {
 mvn package
 ```
 
-然后执行：
+现在可以运行代码：
 
 ```bash
 mvn exec:java -Dexec.mainClass="com.example.App"
 ```
 
-下面是从第一页获取到的输出示例：
+以下是第一页的输出。
 
 ```
 ---------------------PAGE 1--------------------------
@@ -375,12 +375,12 @@ Link: https://books.toscrape.com/catalogue/its-only-the-himalayas_981/index.html
 Total pages scraped: 1
 ```
 
-## 结论
+## 总结
 
-对动态网站(如商品列表、新闻、研究数据等)进行爬取可能具有一定挑战。[Bright Data 的多种工具](https://www.bright.cn/products)可以帮助你更好地扩展爬取工作：
+抓取产品列表、新闻或研究数据等动态网站可能颇具挑战。[Bright Data 的工具](https://www.bright.cn/products)可帮助你大规模开展抓取工作：
 
-- [住宅代理](https://www.bright.cn/proxy-types/residential-proxies)：避开 IP 封禁和地理限制。  
-- [抓取浏览器](https://www.bright.cn/products/scraping-browser)：轻松处理大量 JavaScript 页面。  
-- [可直接使用的数据集](https://www.bright.cn/products/datasets)：无需自行爬取即可获取结构化数据。
+- **[住宅代理](https://www.bright.cn/proxy-types/residential-proxies)：** 绕过 IP 封禁和地理限制。
+- **[抓取浏览器](https://www.bright.cn/products/scraping-browser)：** 轻松处理大量使用 JavaScript 的网站。
+- **[即用型数据集](https://www.bright.cn/products/datasets)：** 无需自行爬取即可获取结构化数据。
 
-将这些与 jsoup 结合使用，可在高效率、低风险的前提下进行数据提取。立即免费试用吧！
+将这些工具与 jsoup 结合使用，可实现高效、低风险的数据提取。立即免费试用！
